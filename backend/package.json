@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "seed": "node src/seed/seedroles.js"
+    "seed": "node src/seed/seedUsers.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
