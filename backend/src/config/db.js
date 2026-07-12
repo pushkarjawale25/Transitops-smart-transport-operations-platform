@@ -4,8 +4,13 @@ let mongoServer;
 
 const connectDB = async () => {
     try {
+<<<<<<< HEAD
         let uri = process.env.MONGO_URI || "mongodb+srv://pushkar:Pushkar2005@cluster0.duv1kem.mongodb.net/strideX?appName=Cluster0";
 
+=======
+        let uri = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/transitops";
+        
+>>>>>>> f9b29c5 (final)
         try {
             console.log(`Connecting to MongoDB at ${uri}...`);
             await mongoose.connect(uri, { serverSelectionTimeoutMS: 2000 });

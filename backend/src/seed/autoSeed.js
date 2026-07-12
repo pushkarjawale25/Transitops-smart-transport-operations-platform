@@ -100,6 +100,7 @@ const mockExpenses = [
 
 const seedAll = async () => {
     try {
+<<<<<<< HEAD
         console.log("Checking database state for seeding...");
 
         // 1. Seed Users if not present
@@ -212,6 +213,112 @@ const seedAll = async () => {
         } else {
             console.log("Operational database records already exist. Skipping demo data seed.");
         }
+=======
+        const count = await User.countDocuments();
+        if (count > 0) {
+            console.log("Database already has data. Skipping seed.");
+            return;
+        }
+
+        console.log("Seeding Database...");
+
+        // 1. Seed Users
+        const createdUsers = [];
+        for (const u of users) {
+            const user = await User.create(u);
+            createdUsers.push(user);
+        }
+        console.log(`Seeded ${createdUsers.length} users.`);
+
+        const adminUser = createdUsers.find(u => u.role === "Admin");
+
+        // 2. Seed Vehicles
+        const vehicleMap = {};
+        for (const v of mockVehicles) {
+            const { localId, ...rest } = v;
+            const vehicle = await Vehicle.create(rest);
+            vehicleMap[localId] = vehicle._id;
+        }
+        console.log(`Seeded ${Object.keys(vehicleMap).length} vehicles.`);
+
+        // 3. Seed Drivers
+        const driverMap = {};
+        for (const d of mockDrivers) {
+            const { localId, ...rest } = d;
+            const driver = await Driver.create(rest);
+            driverMap[localId] = driver._id;
+        }
+        console.log(`Seeded ${Object.keys(driverMap).length} drivers.`);
+
+        // 4. Seed Trips
+        let tripCount = 0;
+        for (const t of mockTrips) {
+            await Trip.create({
+                source: t.source,
+                destination: t.destination,
+                vehicle: vehicleMap[t.vehicleLocalId],
+                driver: driverMap[t.driverLocalId],
+                cargoWeight: t.cargoWeight,
+                plannedDistance: t.plannedDistance,
+                actualDistance: t.actualDistance || 0,
+                fuelConsumed: t.fuelConsumed || 0,
+                revenue: t.revenue,
+                dispatchDate: t.dispatchDate,
+                status: t.status,
+                createdBy: adminUser._id
+            });
+            tripCount++;
+        }
+        console.log(`Seeded ${tripCount} trips.`);
+
+        // 5. Seed Maintenance
+        let maintenanceCount = 0;
+        for (const m of mockMaintenance) {
+            await Maintenance.create({
+                vehicle: vehicleMap[m.vehicleLocalId],
+                maintenanceType: m.maintenanceType,
+                description: m.description,
+                cost: m.cost,
+                date: m.date,
+                closedAt: m.closedAt,
+                status: m.status
+            });
+            maintenanceCount++;
+        }
+        console.log(`Seeded ${maintenanceCount} maintenance logs.`);
+
+        // 6. Seed Fuel Logs
+        let fuelCount = 0;
+        for (const f of mockFuelLogs) {
+            await FuelLog.create({
+                vehicle: vehicleMap[f.vehicleLocalId],
+                liters: f.liters,
+                cost: f.cost,
+                date: f.date,
+                odometerKm: f.odometerKm,
+                addedBy: adminUser._id
+            });
+            fuelCount++;
+        }
+        console.log(`Seeded ${fuelCount} fuel logs.`);
+
+        // 7. Seed Expenses
+        let expenseCount = 0;
+        for (const e of mockExpenses) {
+            await Expense.create({
+                vehicle: vehicleMap[e.vehicleLocalId],
+                category: e.category,
+                amount: e.amount,
+                description: e.description,
+                date: e.date,
+                addedBy: adminUser._id
+            });
+            expenseCount++;
+        }
+        console.log(`Seeded ${expenseCount} expenses.`);
+
+        console.log("Database Seeding Completed Successfully.");
+>>>>>>> f9b29c5 (final)
     } catch (error) {
         console.error("Error Seeding Database:", error);
     }
