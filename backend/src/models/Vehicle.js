@@ -15,7 +15,7 @@ const vehicleSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ["Truck", "Van", "Bus", "Car", "Other"],
+        enum: ["Truck", "Van", "Bus", "Car", "Trailer", "Refrigerated", "Other"],
         required: true
     },
     capacity: {
@@ -37,6 +37,11 @@ const vehicleSchema = new mongoose.Schema({
         type: String,
         enum: ["Available", "On Trip", "In Shop", "Retired"],
         default: "Available"
+    },
+    region: {
+        type: String,
+        enum: ["North", "South", "East", "West"],
+        default: "North"
     }
 }, { timestamps: true });
 

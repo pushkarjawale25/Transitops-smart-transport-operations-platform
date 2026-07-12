@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["Admin", "Fleet Manager", "Driver", "Safety Officer", "Financial Analyst"],
+        enum: ["Admin", "Fleet Manager", "Dispatcher", "Driver", "Safety Officer", "Financial Analyst"],
         required: true
     },
     status: {
@@ -31,11 +31,10 @@ const userSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-userSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) return next();
+userSchema.pre("save", async function () {
+    if (!this.isModified("password")) return;
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-    next();
 });
 
 userSchema.methods.comparePassword = async function (password) {

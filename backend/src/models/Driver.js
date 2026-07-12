@@ -12,6 +12,11 @@ const driverSchema = new mongoose.Schema({
         unique: true,
         trim: true
     },
+    licenseCategory: {
+        type: String,
+        enum: ["A", "B", "C", "C+E", "D"],
+        default: "C"
+    },
     expiryDate: {
         type: Date,
         required: true
@@ -19,6 +24,10 @@ const driverSchema = new mongoose.Schema({
     phone: {
         type: String,
         required: true,
+        trim: true
+    },
+    contact: {
+        type: String,
         trim: true
     },
     safetyScore: {
@@ -39,3 +48,4 @@ driverSchema.virtual("isLicenseExpired").get(function () {
 });
 
 module.exports = mongoose.model("Driver", driverSchema);
+

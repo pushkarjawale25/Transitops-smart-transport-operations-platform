@@ -20,6 +20,11 @@ const fuelLogSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    odometerKm: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
     addedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
@@ -27,3 +32,4 @@ const fuelLogSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 module.exports = mongoose.model("FuelLog", fuelLogSchema);
+

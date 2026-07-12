@@ -39,6 +39,14 @@ const tripSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    revenue: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    dispatchDate: {
+        type: Date
+    },
     status: {
         type: String,
         enum: ["Draft", "Dispatched", "Completed", "Cancelled"],
@@ -57,3 +65,4 @@ const tripSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 module.exports = mongoose.model("Trip", tripSchema);
+
